@@ -1,0 +1,18 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.miguelgaeta.easypreference.app">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".TestApplication"
+        android:allowBackup="true"
+        android:icon="@null"
+        android:theme="@style/Theme.AppCompat">
+
+        <activity android:name=".TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
