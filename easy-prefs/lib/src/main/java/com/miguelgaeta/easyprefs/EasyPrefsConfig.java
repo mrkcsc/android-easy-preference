@@ -1,4 +1,4 @@
-package com.miguelgaeta.easypreference;
+package com.miguelgaeta.easyprefs;
 
 import android.app.Application;
 import android.content.Context;
@@ -15,7 +15,7 @@ import lombok.Setter;
  * Created by mrkcsc on 3/9/15.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class MGPreferenceConfig {
+public class EasyPrefsConfig {
 
     @Getter(AccessLevel.PACKAGE)
     private Context context;

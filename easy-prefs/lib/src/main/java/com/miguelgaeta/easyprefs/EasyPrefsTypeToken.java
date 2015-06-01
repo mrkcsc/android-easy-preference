@@ -1,4 +1,4 @@
-package com.miguelgaeta.easypreference;
+package com.miguelgaeta.easyprefs;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -17,7 +17,7 @@ import lombok.ToString;
  * Created by Miguel Gaeta on 4/15/15.
  */
 @SuppressWarnings("UnusedDeclaration") @Getter @ToString @EqualsAndHashCode
-class MGPreferenceTypeToken {
+class EasyPrefsTypeToken {
 
     private enum ObjectType {
 
@@ -33,11 +33,11 @@ class MGPreferenceTypeToken {
     private String typeToken;
 
     // Store type token for collection values.
-    private MGPreferenceTypeToken typeTokenCollectionElement;
+    private EasyPrefsTypeToken typeTokenCollectionElement;
 
     // Type type tokens for map key/value pairs.
-    private MGPreferenceTypeToken typeTokenMapKeyElement;
-    private MGPreferenceTypeToken typeTokenMapValueElement;
+    private EasyPrefsTypeToken typeTokenMapKeyElement;
+    private EasyPrefsTypeToken typeTokenMapValueElement;
 
     /**
      * Generates a complex type token object that captures
@@ -46,9 +46,9 @@ class MGPreferenceTypeToken {
      *
      * Currently only supports collections and maps.
      */
-    public static MGPreferenceTypeToken create(Object object) {
+    public static EasyPrefsTypeToken create(Object object) {
 
-        MGPreferenceTypeToken typeToken = new MGPreferenceTypeToken();
+        EasyPrefsTypeToken typeToken = new EasyPrefsTypeToken();
 
         typeToken.typeToken = object.getClass().getName();
         typeToken.typeClassifier = ObjectType.TYPE_OBJECT;
@@ -56,7 +56,7 @@ class MGPreferenceTypeToken {
         if (isNonEmptyCollection(object)) {
 
             typeToken.typeClassifier = ObjectType.TYPE_COLLECTION;
-            typeToken.typeTokenCollectionElement = MGPreferenceTypeToken.create(((Collection)object).iterator().next());
+            typeToken.typeTokenCollectionElement = EasyPrefsTypeToken.create(((Collection) object).iterator().next());
         }
 
         if (object instanceof Map && ((Map)object).size() > 0) {
@@ -76,8 +76,8 @@ class MGPreferenceTypeToken {
                 // If value is not a collection, or is a non-empty collection, or is the last key in the set.
                 if (!(value instanceof Collection) || isNonEmptyCollection(((Map)object).get(key)) || index == keySet.size() - 1) {
 
-                    typeToken.typeTokenMapKeyElement = MGPreferenceTypeToken.create(key);
-                    typeToken.typeTokenMapValueElement = MGPreferenceTypeToken.create(((Map)object).get(key));
+                    typeToken.typeTokenMapKeyElement = EasyPrefsTypeToken.create(key);
+                    typeToken.typeTokenMapValueElement = EasyPrefsTypeToken.create(((Map) object).get(key));
 
                     break;
                 }
@@ -92,9 +92,9 @@ class MGPreferenceTypeToken {
     /**
      * Serialize from json object.
      */
-    public static MGPreferenceTypeToken createFromJson(Gson gson, String json) {
+    public static EasyPrefsTypeToken createFromJson(Gson gson, String json) {
 
-        return gson.fromJson(json, MGPreferenceTypeToken.class);
+        return gson.fromJson(json, EasyPrefsTypeToken.class);
     }
 
     /**

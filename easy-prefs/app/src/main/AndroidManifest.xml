@@ -1,14 +1,14 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.miguelgaeta.easypreference.app">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.miguelgaeta.easyprefs.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".TestApplication"
+        android:name="com.miguelgaeta.easyprefs.app.TestApplication"
         android:allowBackup="true"
         android:icon="@null"
         android:theme="@style/Theme.AppCompat">
 
-        <activity android:name=".TestActivity">
+        <activity android:name="com.miguelgaeta.easyprefs.app.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

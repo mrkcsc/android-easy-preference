@@ -1,4 +1,4 @@
-package com.miguelgaeta.easypreference;
+package com.miguelgaeta.easyprefs;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -15,7 +15,7 @@ import rx.schedulers.Schedulers;
  * Created by Miguel Gaeta on 3/9/15.
  */
 @SuppressWarnings("unchecked")
-class MGPreferenceMetaData<T> {
+class EasyPrefsMetaData<T> {
 
     // A memory cache of the preference value
     // so we do not have to go into the native
@@ -40,16 +40,16 @@ class MGPreferenceMetaData<T> {
      * Creates a new preference object that is backed
      * by the android shared preferences object.
      */
-    MGPreferenceMetaData(String key, T defaultValue, boolean cacheBreaker) {
+    EasyPrefsMetaData(String key, T defaultValue, boolean cacheBreaker) {
 
         if (cacheBreaker) {
 
             // Append cache breaker.
-            key += "_" + MGPreference.getConfig().getApplicationVersionCode();
+            key += "_" + EasyPrefs.getConfig().getApplicationVersionCode();
         }
 
         // Set gson.
-        this.gson = MGPreference.getConfig().getGson();
+        this.gson = EasyPrefs.getConfig().getGson();
 
         // Set key.
         this.key = key;
@@ -65,7 +65,7 @@ class MGPreferenceMetaData<T> {
      */
     private SharedPreferences getSharedPreferences() {
 
-        return PreferenceManager.getDefaultSharedPreferences(MGPreference.getConfig().getContext());
+        return PreferenceManager.getDefaultSharedPreferences(EasyPrefs.getConfig().getContext());
     }
 
     /**
@@ -103,7 +103,7 @@ class MGPreferenceMetaData<T> {
             if (typeTokenJson != null) {
 
                 // Serialize type token into object.
-                MGPreferenceTypeToken typeToken = MGPreferenceTypeToken.createFromJson(gson, typeTokenJson);
+                EasyPrefsTypeToken typeToken = EasyPrefsTypeToken.createFromJson(gson, typeTokenJson);
 
                 // Fetch raw json associated with this preference key.
                 String keyJson = getSharedPreferences().getString(key, null);
@@ -146,7 +146,7 @@ class MGPreferenceMetaData<T> {
             Observable<Pair<String, String>> serializationObservable = Observable.create(subscriber -> {
 
                 String key = gson.toJson(value);
-                String keyTypeToken = gson.toJson(MGPreferenceTypeToken.create(value));
+                String keyTypeToken = gson.toJson(EasyPrefsTypeToken.create(value));
 
                 subscriber.onNext(new Pair<>(key, keyTypeToken));
                 subscriber.onCompleted();

@@ -1,4 +1,4 @@
-package com.miguelgaeta.easypreference.app;
+package com.miguelgaeta.easyprefs.app;
 
 import android.app.Application;
 

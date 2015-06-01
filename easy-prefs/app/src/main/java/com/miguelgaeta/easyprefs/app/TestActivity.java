@@ -1,4 +1,4 @@
-package com.miguelgaeta.easypreference.app;
+package com.miguelgaeta.easyprefs.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
