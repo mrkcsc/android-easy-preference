@@ -13,7 +13,7 @@ import lombok.NonNull;
  * performs a subset of operations needed
  * by easy prefs.
  */
-public class SharedPreferences {
+class SharedPreferences {
 
     private static android.content.SharedPreferences get() {
 

@@ -17,7 +17,7 @@ import lombok.ToString;
  * Created by Miguel Gaeta on 4/15/15.
  */
 @SuppressWarnings("UnusedDeclaration") @Getter @ToString @EqualsAndHashCode
-class EasyPrefsTypeToken {
+class TypeToken {
 
     private enum ObjectType {
 
@@ -33,11 +33,11 @@ class EasyPrefsTypeToken {
     private String typeToken;
 
     // Store type token for collection values.
-    private EasyPrefsTypeToken typeTokenCollectionElement;
+    private TypeToken typeTokenCollectionElement;
 
     // Type type tokens for map key/value pairs.
-    private EasyPrefsTypeToken typeTokenMapKeyElement;
-    private EasyPrefsTypeToken typeTokenMapValueElement;
+    private TypeToken typeTokenMapKeyElement;
+    private TypeToken typeTokenMapValueElement;
 
     /**
      * Generates a complex type token object that captures
@@ -46,9 +46,9 @@ class EasyPrefsTypeToken {
      *
      * Currently only supports collections and maps.
      */
-    public static EasyPrefsTypeToken create(Object object) {
+    public static TypeToken create(Object object) {
 
-        EasyPrefsTypeToken typeToken = new EasyPrefsTypeToken();
+        TypeToken typeToken = new TypeToken();
 
         typeToken.typeToken = object.getClass().getName();
         typeToken.typeClassifier = ObjectType.TYPE_OBJECT;
@@ -56,7 +56,7 @@ class EasyPrefsTypeToken {
         if (isNonEmptyCollection(object)) {
 
             typeToken.typeClassifier = ObjectType.TYPE_COLLECTION;
-            typeToken.typeTokenCollectionElement = EasyPrefsTypeToken.create(((Collection) object).iterator().next());
+            typeToken.typeTokenCollectionElement = TypeToken.create(((Collection) object).iterator().next());
         }
 
         if (object instanceof Map && ((Map)object).size() > 0) {
@@ -76,8 +76,8 @@ class EasyPrefsTypeToken {
                 // If value is not a collection, or is a non-empty collection, or is the last key in the set.
                 if (!(value instanceof Collection) || isNonEmptyCollection(((Map)object).get(key)) || index == keySet.size() - 1) {
 
-                    typeToken.typeTokenMapKeyElement = EasyPrefsTypeToken.create(key);
-                    typeToken.typeTokenMapValueElement = EasyPrefsTypeToken.create(((Map) object).get(key));
+                    typeToken.typeTokenMapKeyElement = TypeToken.create(key);
+                    typeToken.typeTokenMapValueElement = TypeToken.create(((Map) object).get(key));
 
                     break;
                 }
@@ -92,9 +92,9 @@ class EasyPrefsTypeToken {
     /**
      * Serialize from json object.
      */
-    public static EasyPrefsTypeToken createFromJson(Gson gson, String json) {
+    public static TypeToken createFromJson(Gson gson, String json) {
 
-        return gson.fromJson(json, EasyPrefsTypeToken.class);
+        return gson.fromJson(json, TypeToken.class);
     }
 
     /**

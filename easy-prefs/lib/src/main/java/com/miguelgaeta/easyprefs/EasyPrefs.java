@@ -10,10 +10,10 @@ import lombok.NonNull;
 public class EasyPrefs<T> {
 
     @Getter(lazy = true)
-    private static final EasyPrefsConfig config = new EasyPrefsConfig();
+    private static final Config config = new Config();
 
     // Meta data object to do the persisting.
-    private EasyPrefsMetaData<T> metaData;
+    private MetaData<T> metaData;
 
     /**
      * Creates a new preference object that is backed
@@ -22,7 +22,7 @@ public class EasyPrefs<T> {
     private EasyPrefs(String key, T defaultValue, boolean cacheBreaker) {
 
         // Meta data does all the heavy lifting.
-        metaData = new EasyPrefsMetaData<>(key, defaultValue, cacheBreaker);
+        metaData = new MetaData<>(key, defaultValue, cacheBreaker);
     }
 
     /**
