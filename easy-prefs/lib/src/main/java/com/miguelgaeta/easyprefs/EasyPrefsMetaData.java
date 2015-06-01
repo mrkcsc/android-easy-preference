@@ -1,7 +1,6 @@
 package com.miguelgaeta.easyprefs;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Pair;
 
 import com.google.gson.Gson;
@@ -45,7 +44,7 @@ class EasyPrefsMetaData<T> {
         if (cacheBreaker) {
 
             // Append cache breaker.
-            key += "_" + EasyPrefs.getConfig().getApplicationVersionCode();
+            key += "_" + EasyPrefsConfig.getApplicationVersionCode();
         }
 
         // Set gson.
@@ -60,21 +59,12 @@ class EasyPrefsMetaData<T> {
     }
 
     /**
-     * Fetch the native android shared
-     * preferences object.
-     */
-    private SharedPreferences getSharedPreferences() {
-
-        return PreferenceManager.getDefaultSharedPreferences(EasyPrefs.getConfig().getContext());
-    }
-
-    /**
      * Fetch and open the native android
      * shared preferences editor.
      */
     private SharedPreferences.Editor getSharedPreferencesEditor() {
 
-        return getSharedPreferences().edit();
+        return EasyPrefsConfig.getSharedPreferences().edit();
     }
 
     /**
@@ -98,7 +88,7 @@ class EasyPrefsMetaData<T> {
         if (locallyCachedValue == null) {
 
             // First fetch complex type token for preference.
-            String typeTokenJson = getSharedPreferences().getString(keyTypeToken, null);
+            String typeTokenJson = EasyPrefsConfig.getSharedPreferences().getString(keyTypeToken, null);
 
             if (typeTokenJson != null) {
 
@@ -106,7 +96,7 @@ class EasyPrefsMetaData<T> {
                 EasyPrefsTypeToken typeToken = EasyPrefsTypeToken.createFromJson(gson, typeTokenJson);
 
                 // Fetch raw json associated with this preference key.
-                String keyJson = getSharedPreferences().getString(key, null);
+                String keyJson = EasyPrefsConfig.getSharedPreferences().getString(key, null);
 
                 if (keyJson != null) {
 

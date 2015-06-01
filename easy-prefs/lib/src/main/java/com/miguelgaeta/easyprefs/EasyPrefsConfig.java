@@ -2,7 +2,9 @@ package com.miguelgaeta.easyprefs;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,14 +19,10 @@ import lombok.Setter;
 @SuppressWarnings("UnusedDeclaration")
 public class EasyPrefsConfig {
 
-    @Getter(AccessLevel.PACKAGE)
     private Context context;
 
     @Getter(AccessLevel.PACKAGE) @Setter
     private Gson gson = new GsonBuilder().create();
-
-    @Getter(AccessLevel.PACKAGE)
-    private int applicationVersionCode;
 
     public void init(Context context) {
 
@@ -32,26 +30,39 @@ public class EasyPrefsConfig {
 
             this.context = context;
 
-            this.applicationVersionCode = getApplicationVersionCode(context);
-
         } else {
 
             throw new RuntimeException("An application context is required.");
         }
     }
 
-    private static int getApplicationVersionCode(Context context) {
+    /**
+     * Application version code is used as an optional
+     * cache breaker for preferences.  This can be
+     * helpful for making breaking changes to
+     * the underlying structures.
+     */
+    public static int getApplicationVersionCode() {
 
-        PackageManager manager = context.getPackageManager();
+        PackageManager manager = EasyPrefs.getConfig().context.getPackageManager();
 
         try {
 
             // Fetch current version code from the current package.
-            return manager.getPackageInfo(context.getPackageName(), 0).versionCode;
+            return manager.getPackageInfo(EasyPrefs.getConfig().context.getPackageName(), 0).versionCode;
 
         } catch (PackageManager.NameNotFoundException e) {
 
             return 0;
         }
+    }
+
+    /**
+     * Fetch the native android shared
+     * preferences object.
+     */
+    public static SharedPreferences getSharedPreferences() {
+
+        return PreferenceManager.getDefaultSharedPreferences(EasyPrefs.getConfig().context);
     }
 }
