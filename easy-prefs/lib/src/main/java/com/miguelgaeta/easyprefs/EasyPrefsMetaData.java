@@ -1,13 +1,13 @@
 package com.miguelgaeta.easyprefs;
 
-import android.content.SharedPreferences;
 import android.util.Pair;
 
 import com.google.gson.Gson;
 
+import java.util.Arrays;
+
 import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -59,23 +59,11 @@ class EasyPrefsMetaData<T> {
     }
 
     /**
-     * Fetch and open the native android
-     * shared preferences editor.
-     */
-    private SharedPreferences.Editor getSharedPreferencesEditor() {
-
-        return EasyPrefsConfig.getSharedPreferences().edit();
-    }
-
-    /**
      * Clear out any value stored.
      */
     void clear() {
 
-        SharedPreferences.Editor editor = getSharedPreferencesEditor();
-
-        editor.remove(key);
-        editor.apply();
+        EasyPrefsConfig.removeSharedPreferencesKey(key);
 
         locallyCachedValue = null;
     }
@@ -88,7 +76,7 @@ class EasyPrefsMetaData<T> {
         if (locallyCachedValue == null) {
 
             // First fetch complex type token for preference.
-            String typeTokenJson = EasyPrefsConfig.getSharedPreferences().getString(keyTypeToken, null);
+            String typeTokenJson = EasyPrefsConfig.getSharedPreferencesString(keyTypeToken);
 
             if (typeTokenJson != null) {
 
@@ -96,7 +84,7 @@ class EasyPrefsMetaData<T> {
                 EasyPrefsTypeToken typeToken = EasyPrefsTypeToken.createFromJson(gson, typeTokenJson);
 
                 // Fetch raw json associated with this preference key.
-                String keyJson = EasyPrefsConfig.getSharedPreferences().getString(key, null);
+                String keyJson = EasyPrefsConfig.getSharedPreferencesString(key);
 
                 if (keyJson != null) {
 
@@ -144,18 +132,13 @@ class EasyPrefsMetaData<T> {
 
             serializationSubscription = serializationObservable
 
-                // Perform serialization on worker thread.
                 .subscribeOn(Schedulers.computation())
-
-                // Update shared preferences on main thread.
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(keyTypeTokenPair -> {
 
-                    SharedPreferences.Editor editor = getSharedPreferencesEditor();
+                    EasyPrefsConfig.setSharedPreferencesString(Arrays.asList(
 
-                    editor.putString(key, keyTypeTokenPair.first);
-                    editor.putString(keyTypeToken, keyTypeTokenPair.second);
-                    editor.apply();
+                        Pair.create(key,          keyTypeTokenPair.first),
+                        Pair.create(keyTypeToken, keyTypeTokenPair.second)));
                 });
         }
     }

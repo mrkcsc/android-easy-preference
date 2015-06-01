@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -61,8 +65,30 @@ public class EasyPrefsConfig {
      * Fetch the native android shared
      * preferences object.
      */
-    public static SharedPreferences getSharedPreferences() {
+    private static SharedPreferences getSharedPreferences() {
 
         return PreferenceManager.getDefaultSharedPreferences(EasyPrefs.getConfig().context);
+    }
+
+    public static String getSharedPreferencesString(@NonNull String key) {
+
+        return getSharedPreferences().getString(key, null);
+    }
+
+    public static void setSharedPreferencesString(@NonNull List<Pair<String, String>> keyValuePairs) {
+
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+
+        for (Pair<String, String> keyValuePair : keyValuePairs) {
+
+            editor.putString(keyValuePair.first, keyValuePair.second);
+        }
+
+        editor.apply();
+    }
+
+    public static void removeSharedPreferencesKey(@NonNull String key) {
+
+        getSharedPreferences().edit().remove(key).apply();
     }
 }
