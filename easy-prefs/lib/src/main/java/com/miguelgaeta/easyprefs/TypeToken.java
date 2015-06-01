@@ -92,7 +92,7 @@ class TypeToken {
     /**
      * Serialize from json object.
      */
-    public static TypeToken createFromJson(Gson gson, String json) {
+    public static TypeToken create(Gson gson, String json) {
 
         return gson.fromJson(json, TypeToken.class);
     }
@@ -180,6 +180,6 @@ class TypeToken {
      */
     private static boolean isNonEmptyCollection(Object object) {
 
-        return object instanceof Collection && ((Collection)object).size() > 0;
+        return object instanceof Collection && !((Collection)object).isEmpty();
     }
 }

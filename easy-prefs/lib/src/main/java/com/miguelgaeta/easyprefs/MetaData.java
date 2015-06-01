@@ -81,7 +81,7 @@ class MetaData<T> {
             if (typeTokenJson != null) {
 
                 // Serialize type token into object.
-                TypeToken typeToken = TypeToken.createFromJson(gson, typeTokenJson);
+                TypeToken typeToken = TypeToken.create(gson, typeTokenJson);
 
                 // Fetch raw json associated with this preference key.
                 String keyJson = SharedPreferences.getString(key);
