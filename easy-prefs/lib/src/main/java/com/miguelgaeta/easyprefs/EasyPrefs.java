@@ -22,7 +22,7 @@ public class EasyPrefs<T> {
     private EasyPrefs(String key, T defaultValue, boolean cacheBreaker) {
 
         // Meta data does all the heavy lifting.
-        metaData = new MetaData<>(key, defaultValue, cacheBreaker);
+        metaData = new MetaData<>(Config.getGson(), key, defaultValue, cacheBreaker);
     }
 
     /**

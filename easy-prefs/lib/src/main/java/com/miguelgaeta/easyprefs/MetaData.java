@@ -39,7 +39,7 @@ class MetaData<T> {
      * Creates a new preference object that is backed
      * by the android shared preferences object.
      */
-    MetaData(String key, T defaultValue, boolean cacheBreaker) {
+    MetaData(Gson gson, String key, T defaultValue, boolean cacheBreaker) {
 
         if (cacheBreaker) {
 
@@ -47,14 +47,11 @@ class MetaData<T> {
             key += "_" + Config.getApplicationVersionCode();
         }
 
-        // Set gson.
-        this.gson = Config.getGson();
+        this.gson = gson;
 
-        // Set key.
         this.key = key;
         this.keyTypeToken = key + "_TYPE_TOKEN";
 
-        // Set default value.
         this.defaultValue = defaultValue;
     }
 
