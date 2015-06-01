@@ -63,7 +63,7 @@ class EasyPrefsMetaData<T> {
      */
     void clear() {
 
-        EasyPrefsConfig.removeSharedPreferencesKey(key);
+        SharedPreferences.removeString(key);
 
         locallyCachedValue = null;
     }
@@ -76,7 +76,7 @@ class EasyPrefsMetaData<T> {
         if (locallyCachedValue == null) {
 
             // First fetch complex type token for preference.
-            String typeTokenJson = EasyPrefsConfig.getSharedPreferencesString(keyTypeToken);
+            String typeTokenJson = SharedPreferences.getString(keyTypeToken);
 
             if (typeTokenJson != null) {
 
@@ -84,7 +84,7 @@ class EasyPrefsMetaData<T> {
                 EasyPrefsTypeToken typeToken = EasyPrefsTypeToken.createFromJson(gson, typeTokenJson);
 
                 // Fetch raw json associated with this preference key.
-                String keyJson = EasyPrefsConfig.getSharedPreferencesString(key);
+                String keyJson = SharedPreferences.getString(key);
 
                 if (keyJson != null) {
 
@@ -135,7 +135,7 @@ class EasyPrefsMetaData<T> {
                 .subscribeOn(Schedulers.computation())
                 .subscribe(keyTypeTokenPair -> {
 
-                    EasyPrefsConfig.setSharedPreferencesString(Arrays.asList(
+                    SharedPreferences.setString(Arrays.asList(
 
                         Pair.create(key,          keyTypeTokenPair.first),
                         Pair.create(keyTypeToken, keyTypeTokenPair.second)));
