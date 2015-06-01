@@ -48,7 +48,7 @@ class MetaData<T> {
         }
 
         // Set gson.
-        this.gson = EasyPrefs.getConfig().getGson();
+        this.gson = Config.getGson();
 
         // Set key.
         this.key = key;

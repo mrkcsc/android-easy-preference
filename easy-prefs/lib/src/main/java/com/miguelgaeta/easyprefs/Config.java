@@ -7,8 +7,6 @@ import android.content.pm.PackageManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -19,7 +17,7 @@ public class Config {
 
     private Context context;
 
-    @Getter(AccessLevel.PACKAGE) @Setter
+    @Setter
     private Gson gson = new GsonBuilder().create();
 
     public void init(Context context) {
@@ -32,6 +30,11 @@ public class Config {
 
             throw new RuntimeException("An application context is required.");
         }
+    }
+
+    static Gson getGson() {
+
+        return EasyPrefs.getConfig().gson;
     }
 
     static Context getContext() {
