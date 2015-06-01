@@ -1,6 +1,6 @@
 package com.miguelgaeta.easyprefs;
 
-import android.preference.PreferenceManager;
+import android.content.Context;
 import android.util.Pair;
 
 import java.util.List;
@@ -17,7 +17,7 @@ class SharedPreferences {
 
     private static android.content.SharedPreferences get() {
 
-        return PreferenceManager.getDefaultSharedPreferences(EasyPrefs.getConfig().getContext());
+        return Config.getContext().getSharedPreferences("EASY_PREFS", Context.MODE_PRIVATE);
     }
 
     private static android.content.SharedPreferences.Editor getEditor() {

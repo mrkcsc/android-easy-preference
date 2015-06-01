@@ -17,7 +17,6 @@ import lombok.Setter;
 @SuppressWarnings("UnusedDeclaration")
 public class Config {
 
-    @Getter(AccessLevel.PACKAGE)
     private Context context;
 
     @Getter(AccessLevel.PACKAGE) @Setter
@@ -33,6 +32,11 @@ public class Config {
 
             throw new RuntimeException("An application context is required.");
         }
+    }
+
+    static Context getContext() {
+
+        return EasyPrefs.getConfig().context;
     }
 
     /**
