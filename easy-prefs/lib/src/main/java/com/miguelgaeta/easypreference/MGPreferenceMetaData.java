@@ -5,7 +5,6 @@ import android.preference.PreferenceManager;
 import android.util.Pair;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import rx.Observable;
 import rx.Subscription;
@@ -32,7 +31,7 @@ class MGPreferenceMetaData<T> {
     private final String keyTypeToken;
 
     // Gson serializer.
-    private final Gson gson = new GsonBuilder().create();
+    private final Gson gson;
 
     // Holds any active serialization subscription.
     private Subscription serializationSubscription;
@@ -46,8 +45,11 @@ class MGPreferenceMetaData<T> {
         if (cacheBreaker) {
 
             // Append cache breaker.
-            key += "_" + MGPreference.getConfig().getVersionCode();
+            key += "_" + MGPreference.getConfig().getApplicationVersionCode();
         }
+
+        // Set gson.
+        this.gson = MGPreference.getConfig().getGson();
 
         // Set key.
         this.key = key;

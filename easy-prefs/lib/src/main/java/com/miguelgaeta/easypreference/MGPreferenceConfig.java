@@ -4,8 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by mrkcsc on 3/9/15.
@@ -13,45 +17,30 @@ import lombok.Getter;
 @SuppressWarnings("UnusedDeclaration")
 public class MGPreferenceConfig {
 
-    // For any libraries within core, store a context
-    // to make the calling API easier but make sure
-    // that it is a application context to ensure no
-    // activities or fragments can be leaked.
-    @Getter
+    @Getter(AccessLevel.PACKAGE)
     private Context context;
 
-    // Used as a cache breaker to avoid problems
-    // in version increments due to changes in preference
-    // data structures or classes.
-    @Getter(AccessLevel.PACKAGE)
-    private int versionCode;
+    @Getter(AccessLevel.PACKAGE) @Setter
+    private Gson gson = new GsonBuilder().create();
 
-    /**
-     * Standard initialization call.
-     *
-     * @param context Application context.
-     */
+    @Getter(AccessLevel.PACKAGE)
+    private int applicationVersionCode;
+
     public void init(Context context) {
 
         if (context instanceof Application) {
 
-            // Set the context.
             this.context = context;
 
-            // Set the version code.
-            this.versionCode = getVersionCode(context);
+            this.applicationVersionCode = getApplicationVersionCode(context);
 
         } else {
 
-            // Enforce use of an application context.
             throw new RuntimeException("An application context is required.");
         }
     }
 
-    /**
-     * Fetch version code used as a cache breaker.
-     */
-    private int getVersionCode(Context context) {
+    private static int getApplicationVersionCode(Context context) {
 
         PackageManager manager = context.getPackageManager();
 
