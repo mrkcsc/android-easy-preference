@@ -19,7 +19,9 @@ class GenericsTokenSerializer implements JsonSerializer<Object>, JsonDeserialize
 
     @Override
     public Object deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+
         JsonObject jsonObj = jsonElement.getAsJsonObject();
+
         String className = jsonObj.get(CLASS_META_KEY).getAsString();
         try {
             Class<?> clz = Class.forName(className);
@@ -31,9 +33,10 @@ class GenericsTokenSerializer implements JsonSerializer<Object>, JsonDeserialize
 
     @Override
     public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonElement jsonEle = jsonSerializationContext.serialize(object, object.getClass());
-        jsonEle.getAsJsonObject().addProperty(CLASS_META_KEY,
-            object.getClass().getCanonicalName());
+
+        JsonElement jsonEle = jsonSerializationContext.serialize(object);
+        jsonEle.getAsJsonObject().addProperty(CLASS_META_KEY, object.getClass().getCanonicalName());
+
         return jsonEle;
     }
 

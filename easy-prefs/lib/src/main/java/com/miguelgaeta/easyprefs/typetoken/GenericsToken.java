@@ -11,8 +11,21 @@ import java.util.List;
  */
 public class GenericsToken {
 
-    private static final List<Class<?>> knownTokenClasses = Arrays.asList(TypeTokenCollection.class, TypeTokenMap.class, TypeTokenPair.class, TypeTokenObject.class);
+    private static final List<Class<?>> knownTokenClasses = Arrays.asList
+        (TypeTokenCollection.class, TypeTokenMap.class, TypeTokenPair.class, TypeTokenObject.class);
 
+    /**
+     * Use a special gson instance that knows how to handle
+     * the various abstract class implementations of
+     * type token.
+     */
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(TypeToken.class, new GenericsTokenSerializer()).create();
+
+    /**
+     * Creates a type token assuming a match
+     * is found with one of the known
+     * registered classes.
+     */
     public static TypeToken create(Object object) {
 
         try {
@@ -34,15 +47,18 @@ public class GenericsToken {
     }
 
     /**
-     * Create a type token from a json string.
+     * Deserialization will only work using the internal gson instance.
      */
-    public static TypeToken createFromJson(String json) {
-
-        Gson gson = new GsonBuilder()
-
-            .registerTypeAdapter(TypeToken.class, new GenericsTokenSerializer())
-            .registerTypeAdapter(TypeToken.class, new GenericsTokenSerializer()).create();
+    public static TypeToken deserialize(String json) {
 
         return gson.fromJson(json, TypeToken.class);
+    }
+
+    /**
+     * Serialize will only work using the internal gson instance.
+     */
+    public static String serialize(TypeToken typeToken) {
+
+        return gson.toJson(typeToken, TypeToken.class);
     }
 }
