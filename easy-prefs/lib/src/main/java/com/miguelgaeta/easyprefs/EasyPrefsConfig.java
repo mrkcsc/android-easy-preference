@@ -13,7 +13,7 @@ import lombok.Setter;
  * Created by mrkcsc on 3/9/15.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Config {
+public class EasyPrefsConfig {
 
     private Context context;
 

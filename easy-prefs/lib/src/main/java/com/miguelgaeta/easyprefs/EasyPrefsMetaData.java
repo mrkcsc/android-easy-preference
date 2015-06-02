@@ -15,7 +15,7 @@ import rx.schedulers.Schedulers;
  * Created by Miguel Gaeta on 3/9/15.
  */
 @SuppressWarnings("unchecked")
-class MetaData<T> {
+class EasyPrefsMetaData<T> {
 
     // A memory cache of the preference value
     // so we do not have to go into the native
@@ -40,12 +40,12 @@ class MetaData<T> {
      * Creates a new preference object that is backed
      * by the android shared preferences object.
      */
-    MetaData(Gson gson, String key, T defaultValue, boolean cacheBreaker) {
+    EasyPrefsMetaData(Gson gson, String key, T defaultValue, boolean cacheBreaker) {
 
         if (cacheBreaker) {
 
             // Append cache breaker.
-            key += "_" + Config.getApplicationVersionCode();
+            key += "_" + EasyPrefsConfig.getApplicationVersionCode();
         }
 
         this.gson = gson;
@@ -61,7 +61,7 @@ class MetaData<T> {
      */
     void clear() {
 
-        SharedPreferences.removeString(key);
+        EasyPrefsSharedPreferences.removeString(key);
 
         locallyCachedValue = null;
     }
@@ -74,12 +74,12 @@ class MetaData<T> {
         if (locallyCachedValue == null) {
 
             // First fetch complex type token for preference.
-            String typeTokenJson = SharedPreferences.getString(keyTypeToken);
+            String typeTokenJson = EasyPrefsSharedPreferences.getString(keyTypeToken);
 
             if (typeTokenJson != null) {
 
                 // Fetch raw json associated with this preference key.
-                String keyJson = SharedPreferences.getString(key);
+                String keyJson = EasyPrefsSharedPreferences.getString(key);
 
                 if (keyJson != null) {
 
@@ -124,7 +124,7 @@ class MetaData<T> {
 
             serializationSubscription = serializationObservable.subscribeOn(Schedulers.computation()).subscribe(keyTypeTokenPair -> {
 
-                SharedPreferences.setString(Arrays.asList(
+                EasyPrefsSharedPreferences.setString(Arrays.asList(
 
                     Pair.create(key, keyTypeTokenPair.first),
                     Pair.create(keyTypeToken, keyTypeTokenPair.second)));
