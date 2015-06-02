@@ -84,7 +84,7 @@ class MetaData<T> {
                 if (keyJson != null) {
 
                     // Deserialize with type token and update local cache.
-                    locallyCachedValue = (T)GenericsToken.deserialize(typeTokenJson).deserialize(gson, keyJson);
+                    locallyCachedValue = (T)GenericsToken.deserialize(GenericsToken.deserializeToken(typeTokenJson), gson, keyJson);
                 }
             }
         }
@@ -118,20 +118,17 @@ class MetaData<T> {
             // Create an observable that serializes the value and generates its type token.
             Observable<Pair<String, String>> serializationObservable = Observable.create(subscriber -> {
 
-                subscriber.onNext(Pair.create(gson.toJson(value), GenericsToken.serialize(GenericsToken.create(value))));
+                subscriber.onNext(Pair.create(gson.toJson(value), GenericsToken.serializeToken(GenericsToken.create(value))));
                 subscriber.onCompleted();
             });
 
-            serializationSubscription = serializationObservable
+            serializationSubscription = serializationObservable.subscribeOn(Schedulers.computation()).subscribe(keyTypeTokenPair -> {
 
-                .subscribeOn(Schedulers.computation())
-                .subscribe(keyTypeTokenPair -> {
+                SharedPreferences.setString(Arrays.asList(
 
-                    SharedPreferences.setString(Arrays.asList(
-
-                        Pair.create(key, keyTypeTokenPair.first),
-                        Pair.create(keyTypeToken, keyTypeTokenPair.second)));
-                });
+                    Pair.create(key, keyTypeTokenPair.first),
+                    Pair.create(keyTypeToken, keyTypeTokenPair.second)));
+            });
         }
     }
 }
