@@ -13,11 +13,11 @@ import lombok.NonNull;
  * performs a subset of operations needed
  * by easy prefs.
  */
-class SharedPreferences {
+class EasyPrefsSharedPreferences {
 
     private static android.content.SharedPreferences get() {
 
-        return Config.getContext().getSharedPreferences("EASY_PREFS", Context.MODE_PRIVATE);
+        return EasyPrefsConfig.getContext().getSharedPreferences("EASY_PREFS", Context.MODE_PRIVATE);
     }
 
     private static android.content.SharedPreferences.Editor getEditor() {
