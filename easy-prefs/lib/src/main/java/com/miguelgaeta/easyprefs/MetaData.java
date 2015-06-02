@@ -84,7 +84,7 @@ class MetaData<T> {
                 if (keyJson != null) {
 
                     // Deserialize with type token and update local cache.
-                    locallyCachedValue = (T)GenericsToken.createFromJson(typeTokenJson).deserialize(gson, keyJson);
+                    locallyCachedValue = (T)GenericsToken.deserialize(typeTokenJson).deserialize(gson, keyJson);
                 }
             }
         }
@@ -118,7 +118,7 @@ class MetaData<T> {
             // Create an observable that serializes the value and generates its type token.
             Observable<Pair<String, String>> serializationObservable = Observable.create(subscriber -> {
 
-                subscriber.onNext(Pair.create(gson.toJson(value), gson.toJson(GenericsToken.create(value))));
+                subscriber.onNext(Pair.create(gson.toJson(value), GenericsToken.serialize(GenericsToken.create(value))));
                 subscriber.onCompleted();
             });
 
