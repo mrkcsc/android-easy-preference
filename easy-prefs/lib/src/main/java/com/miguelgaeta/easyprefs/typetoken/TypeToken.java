@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * Created by Miguel Gaeta on 6/1/15.
  */
+@ToString
 public abstract class TypeToken {
 
     protected @NonNull List<TypeToken> nestedTypeTokens = new ArrayList<>();
