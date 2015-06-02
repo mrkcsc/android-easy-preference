@@ -12,7 +12,7 @@ import lombok.ToString;
  * Created by Miguel Gaeta on 6/1/15.
  */
 @ToString
-public abstract class TypeToken {
+abstract class TypeToken {
 
     protected @NonNull List<TypeToken> nestedTypeTokens = new ArrayList<>();
 
@@ -49,5 +49,5 @@ public abstract class TypeToken {
      * into the associated object for this
      * type token.
      */
-    public abstract Object deserialize(Gson gson, String json);
+    abstract Object deserialize(Gson gson, String json);
 }

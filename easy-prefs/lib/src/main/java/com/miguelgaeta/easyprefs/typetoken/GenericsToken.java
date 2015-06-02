@@ -49,7 +49,7 @@ public class GenericsToken {
     /**
      * Deserialization will only work using the internal gson instance.
      */
-    public static TypeToken deserialize(String json) {
+    public static TypeToken deserializeToken(String json) {
 
         return gson.fromJson(json, TypeToken.class);
     }
@@ -57,8 +57,19 @@ public class GenericsToken {
     /**
      * Serialize will only work using the internal gson instance.
      */
-    public static String serialize(TypeToken typeToken) {
+    public static String serializeToken(TypeToken typeToken) {
 
         return gson.toJson(typeToken, TypeToken.class);
+    }
+
+    /**
+     * Deserializing a raw object however is allowed
+     * to use an external gson instance.  Proxied
+     * through the TypeToken class to keep visibility
+     * scoped at the package level.
+     */
+    public static Object deserialize(TypeToken typeToken, Gson gson, String json) {
+
+        return typeToken.deserialize(gson, json);
     }
 }
