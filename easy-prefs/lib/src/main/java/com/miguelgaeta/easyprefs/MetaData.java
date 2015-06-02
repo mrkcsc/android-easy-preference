@@ -3,6 +3,7 @@ package com.miguelgaeta.easyprefs;
 import android.util.Pair;
 
 import com.google.gson.Gson;
+import com.miguelgaeta.easyprefs.typetoken.GenericsToken;
 
 import java.util.Arrays;
 
@@ -77,16 +78,13 @@ class MetaData<T> {
 
             if (typeTokenJson != null) {
 
-                // Serialize type token into object.
-                TypeToken typeToken = TypeToken.create(gson, typeTokenJson);
-
                 // Fetch raw json associated with this preference key.
                 String keyJson = SharedPreferences.getString(key);
 
                 if (keyJson != null) {
 
                     // Deserialize with type token and update local cache.
-                    locallyCachedValue = (T)typeToken.fromJson(gson, keyJson);
+                    locallyCachedValue = (T)GenericsToken.createFromJson(typeTokenJson).deserialize(gson, keyJson);
                 }
             }
         }
@@ -120,10 +118,7 @@ class MetaData<T> {
             // Create an observable that serializes the value and generates its type token.
             Observable<Pair<String, String>> serializationObservable = Observable.create(subscriber -> {
 
-                String key = gson.toJson(value);
-                String keyTypeToken = gson.toJson(TypeToken.create(value));
-
-                subscriber.onNext(new Pair<>(key, keyTypeToken));
+                subscriber.onNext(Pair.create(gson.toJson(value), gson.toJson(GenericsToken.create(value))));
                 subscriber.onCompleted();
             });
 
