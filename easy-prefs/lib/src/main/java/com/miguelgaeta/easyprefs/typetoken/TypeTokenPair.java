@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 /**
  * Created by Miguel Gaeta on 6/1/15.
  */
-public class TypeTokenPair extends TypeToken {
+class TypeTokenPair extends TypeToken {
 
     @Override
     protected void build(Object object) {
