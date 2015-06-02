@@ -19,6 +19,11 @@ public abstract class TypeToken {
     @NonNull
     protected String objectClassName;
 
+    /**
+     * Set stores the class name of the underlying object
+     * which can be used for deserialization and then
+     * builds the rest of the type token.
+     */
     void set(Object object) {
 
         this.objectClassName = object.getClass().getName();
@@ -26,6 +31,11 @@ public abstract class TypeToken {
         build(object);
     }
 
+    /**
+     * Build up the type token object from
+     * some complex object.  Generally will involve
+     * adding additional nested type tokens.
+     */
     protected abstract void build(Object object);
 
     /**
